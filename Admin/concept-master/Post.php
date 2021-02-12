@@ -2,9 +2,7 @@
     include_once "../../vendor/autoload.php";
     use App\Controller\Controller;
     $ctrl = new Controller();
-    if(!$ctrl::is_logged_in()){
-        $ctrl::login_error_redirect("Login/login.php");
-    }
+    
     //include_once "../../../src/requests.inc.php";
     //include_once "../../../src/header.inc.php";
 ?>
@@ -270,104 +268,15 @@
             <div class="content">
                 <!--content-->
                 <?php
-                    if(isset($_POST['submit']))
-                    {
-                        $productName = $_POST['product_name'];
-                        $price = $_POST['price'];
-                        $listPrice = $_POST['list_price'];
-                        $cat = $_POST['category'];
-                        $port = $_POST['portfolio'];
-                        $brand = $_POST['brand'];
-                        $details = $_POST['details'];
-                        $sizes = $_POST['sizes'];
-                
-                
-                        $fields = [
-                            'product_name'=>$productName,
-                            'price'=>$price,
-                            'list_price'=>$listPrice,
-                            'category'=>$cat,
-                            'portfolio'=>$port,
-                            'brand'=>$brand,
-                            'description'=>$details,
-                            'sizes'=>$sizes
-                        ];
-                        foreach ($fields as $key => $value) 
-                        {
-                            if(isset($_POST[$key]) && empty($_POST[$key]))
-                            {
-                                $ctrl->error[] = "All feilds are required";
-                            break;
-                            }
-                        }
-                        if(empty($_FILES['photo']['name'][0])){
-                            $ctrl->error[] = "upload image";
-                        }else{
-                            $ctrl->setFile($_FILES);
-                            $ctrl->upload_image();
-                        }
-                        if(!empty($ctrl->error))
-                        {
-                            echo $ctrl->display_errors();
-                        }else{
-                            $ctrl->setData($fields);
-                            $ctrl->add();
-                        }
-                    }
                     if(isset($_GET['edit']))
                     {
                         $edit_id = $_GET['edit'];
                         //$edit_data = new Controller;
                         $data = $ctrl->select_this($edit_id);
-                        $img = explode(',',$data['photo']);
-                        if(isset($_POST['edit']))
-                        { 
-                            if(isset($_FILES['photo']) && !empty($_FILES['photo']['name'])){
-                                $ctrl->setFile($_FILES);
-                                $ctrl->upload_image();
-                            }
-                            $productName = $_POST['product_name'];
-                            $price = $_POST['price'];
-                            $listPrice = $_POST['list_price'];
-                            $cat = $_POST['category'];
-                            $port = $_POST['portfolio'];
-                            $brand = $_POST['brand'];
-                            $details = $_POST['details'];
-                            $sizes = $_POST['sizes'];
-                            $photo = explode(',',$_POST['img']);
-                            $fields = [
-                                'product_name'=>$productName,
-                                'price'=>$price,
-                                'list_price'=>$listPrice,
-                                'category'=>$cat,
-                                'portfolio'=>$port,
-                                'brand'=>$brand,
-                                'description'=>$details,
-                                'sizes'=>$sizes
-                            ];
-                            foreach ($fields as $key => $value) 
-                            {
-                                if(isset($_POST[$key]) && empty($_POST[$key]))
-                                {
-                                    $ctrl->error[] = "All feilds are required";
-                                break;
-                                }
-                            }
-                            if(!empty($ctrl->error))
-                            {
-                                echo $ctrl->display_errors();
-                            }else
-                            {
-                                $ctrl->setData($fields);
-                                if(!empty($ctrl->data))
-                                {
-                                    $ctrl->update($edit_id);
-                                }
-                            }
-                        }           
+                        $img = explode(',',$data['photo']);           
                     }
                 ?>
-                <form action="" method="" id='form' enctype="multipart/form-data">
+                <form action="../../requests.php" method="post" id='form' enctype="multipart/form-data">
                     <div class="row my-4 mx-3">
                         <div class="form-group col-12 col-md-4 col-sm-12">
                             <label for="name">Title</label>
@@ -413,7 +322,7 @@
                                 else:    
                             ?>
                                     <label for="photo">Product Image</label>
-                                    <input type="file" name="photo[]" class="form-control" multiple>
+                                    <input type="file" name="photo[]" id="product-image" class="form-control" multiple>
                             <?php
                                 endif;
                             ?>
@@ -600,7 +509,19 @@
     }*/
     $("#submit").click(function(e){
         e.preventDefault();
-        console.log($('#form').serializeArray());
+        let files = document.querySelector('#product-image').files[0];
+        let formdata = new FormData();
+        formdata.append('file',files);
+
+        /*$.ajax({
+            url: "../../requests.php",
+            method: "POST",
+            data: data,
+            success: (res) => {
+                console.log(res);
+            }
+        })*/
+        console.log(files);
     })
 </script>
 </body>

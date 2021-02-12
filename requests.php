@@ -1,5 +1,97 @@
 <?php
-    
+    if($_POST){
+        print_r($_POST);
+    }
+         if(isset($_POST['submit']))
+         {
+             $productName = $_POST['product_name'];
+             $price = $_POST['price'];
+             $listPrice = $_POST['list_price'];
+             $cat = $_POST['category'];
+             $port = $_POST['portfolio'];
+             $brand = $_POST['brand'];
+             $details = $_POST['details'];
+             $sizes = $_POST['sizes'];
+     
+     
+             $fields = [
+                 'product_name'=>$productName,
+                 'price'=>$price,
+                 'list_price'=>$listPrice,
+                 'category'=>$cat,
+                 'portfolio'=>$port,
+                 'brand'=>$brand,
+                 'description'=>$details,
+                 'sizes'=>$sizes
+             ];
+             foreach ($fields as $key => $value) 
+             {
+                 if(isset($_POST[$key]) && empty($_POST[$key]))
+                 {
+                     $ctrl->error[] = "All feilds are required";
+                 break;
+                 }
+             }
+             if(empty($_FILES['photo']['name'][0])){
+                 $ctrl->error[] = "upload image";
+             }else{
+                 $ctrl->setFile($_FILES);
+                 $ctrl->upload_image();
+             }
+             if(!empty($ctrl->error))
+             {
+                 echo $ctrl->display_errors();
+             }else{
+                 $ctrl->setData($fields);
+                 $ctrl->add();
+             }
+         }
+
+        if(isset($_POST['edit']))
+        { 
+            if(isset($_FILES['photo']) && !empty($_FILES['photo']['name'])){
+                $ctrl->setFile($_FILES);
+                $ctrl->upload_image();
+            }
+            $productName = $_POST['product_name'];
+            $price = $_POST['price'];
+            $listPrice = $_POST['list_price'];
+            $cat = $_POST['category'];
+            $port = $_POST['portfolio'];
+            $brand = $_POST['brand'];
+            $details = $_POST['details'];
+            $sizes = $_POST['sizes'];
+            $photo = explode(',',$_POST['img']);
+            $fields = [
+                'product_name'=>$productName,
+                'price'=>$price,
+                'list_price'=>$listPrice,
+                'category'=>$cat,
+                'portfolio'=>$port,
+                'brand'=>$brand,
+                'description'=>$details,
+                'sizes'=>$sizes
+            ];
+            foreach ($fields as $key => $value) 
+            {
+                if(isset($_POST[$key]) && empty($_POST[$key]))
+                {
+                    $ctrl->error[] = "All feilds are required";
+                    break;
+                }
+            }
+            if(!empty($ctrl->error))
+            {
+                echo $ctrl->display_errors();
+            }else
+            {
+                $ctrl->setData($fields);
+                if(!empty($ctrl->data))
+                {
+                    $ctrl->update($edit_id);
+                }
+            }
+        }
 
         if(isset($_POST['pro_id']) && !empty($_POST['pro_id'])){
             if(isset($_FILES['file']['name']) && !empty($_FILES['file']['name']))
