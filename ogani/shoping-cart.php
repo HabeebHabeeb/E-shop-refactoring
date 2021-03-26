@@ -1,10 +1,9 @@
 <?php
-   include_once "../../Classes/Model/Session.class.php";
-   include_once "../../Classes/Model/Database.class.php";
-   include_once "../../Classes/Controller/Controller.class.php";
-   include_once "../../Classes/Controller/Payment.class.php";
-   $dbh = new Database;
-   $db = $dbh->connect();
+   include_once "../vendor/autoload.php";
+   use App\Controller\Controller;
+   use App\Model\Session;
+
+   $ctrl = new Controller;
 ?>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -253,12 +252,6 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                <?php if(isset($_SESSION['user_id'])):?>
-                    <?php 
-                        $ctrl = new Controller($db);
-                        $cart_data = $ctrl->cart();
-                    ?>
-                    <?php if(!empty($cart_data)):?>
                     <div class="shoping__cart__table">
                         <table>
                             <thead>
@@ -276,7 +269,7 @@
                                    $total = 0;
                                    //if(isset($_SESSION['user_id'])):
                                     //if(!empty($cart_data)):
-                                    foreach($cart_data as $data):
+                                    foreach(Session::get('cart') as $data):
                                         $total = $total + $data['list_price'];
                                         $image = explode(',',$data['photo']);
                                 ?>
@@ -317,17 +310,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <?php
-                            endif;
-                        else:
-                    ?>
-                        <div class="container bg-info text-center">
-                            <h3>NO ITEM</h3>
-                        </div>
-                    <?php
-                        endif;
-                    ?>
-                </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
@@ -435,7 +417,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Shipping Address</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -444,26 +426,27 @@
       <div id="error"></div>
         <div class="" style="display:none" id="step1">
             <form action="">
-                <div class="form-group col-12">
-                    <label for="Address">Shipping Address</label>
-                    <input type="text"id='ad' class="form-control">
-                </div>
-                <div class="form-group col-12">
-                    <label for="pay_type">Choose Payment Type</label><br/>
-                    <select name="pay_type" id="pay_type">
-                        <?php
-                            $card_type = ['Verve','Mastercard','Visa','Paypal','Bank Transfer'];
-                            for($i = 0; $i < count($card_type);++$i):
-                        ?>
-                                <option value="<?=(($card_type[$i] == 'Bank Transfer')?"BankTransfer":$card_type[$i])?>"><?=$card_type[$i]?></option>
-                        <?php
-                            endfor;
-                        ?>        
-                    </select>
+                <div class="row">
+                    <div class="form-group col-12">
+                        <label for="Address">Street</label>
+                        <input type="text"id='ad' class="form-control">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="Address">City</label>
+                        <input type="text"id='' class="form-control">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="Address">State</label>
+                        <input type="text"id='' class="form-control">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="Address">Contact</label>
+                        <input type="text"id='' class="form-control">
+                    </div>
                 </div>
             </form>
         </div>
-        <div class="" style="display:block" id="step1">
+        <div class="" style="display:block" id="step2">
             <!--form action="">
                 <div class="form-group col-12">
                     <label for="name">Card Holder's Name</label>

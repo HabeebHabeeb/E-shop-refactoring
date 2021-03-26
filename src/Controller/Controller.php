@@ -242,7 +242,9 @@
                 $exec = $prep_stmt->execute();
                 if($exec)
                 {
-                    header('Location: pages/data-tables.php');
+                   echo "success";
+                }else{
+                    echo "something went wrong";
                 }
         }
         public function selectAll()
@@ -468,27 +470,6 @@
                 if(!empty($this->error))
                 {
                     echo $this->display_errors();
-                }else
-                {
-                    Session::start();
-                    Session::set('user_id',$result);
-                    //header('Location: '.$url);
-                    if(Session::get('user_id')['permission'] == 1){
-                        header('Location: ../pages/data-tables.php');
-                    }else{
-                        $cart_table = "user_".Session::get('user_id')['id'];
-                        $sql = "CREATE TABLE IF NOT EXISTS $cart_table
-                            (
-                                id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                                product_name VARCHAR(255) NOT NULL,
-                                list_price decimal(10,0) NOT NULL,
-                                sizes varchar(255) NOT NULL, 
-                                photo text NOT NULL,
-                                active int(11) NOT NULL DEFAULT 1
-                            )";
-                        $stmt = $this->DBHandler->query($sql);
-                        header('Location: ../../../index.php');
-                    }
                 }
             }
         }
@@ -517,34 +498,13 @@
             }
             header("Location: ../View/index.php");
         }
-        public function add_cart($id){
-            $cart_data = $this->select_this($id);
-            $key = [];
-            $value = [];
-            $cart_table = "user_".Session::get('user_id')['id'];
-            $field = ['product_name','list_price','sizes','photo'];
-            for($i = 0;$i < count($field);$i++){
-                if(in_array($field[$i],array_keys($cart_data))){
-                    $index = $field[$i];
-                    $key[] =  $field[$i];
-                    $value[] = $cart_data[$index];
-                }
-            }
-            $keys = implode(',',$key);
-            $values = implode(', :',$key);
-
-            $sequel = "INSERT INTO 
-                        $cart_table($keys) 
-                    VALUES
-                        (:".$values.")";
-            $stmt = $this->DBHandler->prepare($sequel);
-            for($i = 0;$i < count($key);$i++){
-                $stmt->bindValue(':'.$key[$i],$value[$i]);
-            }
-            $exec = $stmt->execute();
-            if($exec){
-                header('Location: ../View/index.php');
-            }
+        public function addToCart($id){
+            $sql = "SELECT product_name,sizes,photo,list_price FROM products WHERE id=?";
+            $prep = $this->DBHandler->prepare($sql);
+            $prep->execute([$id]);
+            $res = $prep->fetch();
+            $sess[] = $res;
+            $_SESSION['cart'][] = $res;
         }
         public function cart(){
             $cart_table = "user_".Session::get('user_id')['id'];

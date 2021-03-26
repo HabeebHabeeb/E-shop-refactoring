@@ -1,3 +1,14 @@
+<?php
+    include_once "../vendor/autoload.php";
+    use App\Controller\Controller;
+    if(isset($_GET['buy'])){
+        $id = $_GET['buy'];
+        $ctrl = new Controller;
+        $data = $ctrl->select_this($id);
+        $images = explode(',',$data['photo']);
+        $i = rand(0,(count($images) - 1));
+    }
+?>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -248,23 +259,25 @@
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
                             <img class="product__details__pic__item--large"
-                                src="img/product/details/product-details-1.jpg" alt="">
+                                src="<?=$images[$i]?>" alt="">
                         </div>
                         <div class="product__details__pic__slider owl-carousel">
-                            <img data-imgbigurl="img/product/details/product-details-2.jpg"
-                                src="img/product/details/thumb-1.jpg" alt="">
-                            <img data-imgbigurl="img/product/details/product-details-3.jpg"
-                                src="img/product/details/thumb-2.jpg" alt="">
-                            <img data-imgbigurl="img/product/details/product-details-5.jpg"
-                                src="img/product/details/thumb-3.jpg" alt="">
-                            <img data-imgbigurl="img/product/details/product-details-4.jpg"
-                                src="img/product/details/thumb-4.jpg" alt="">
+                            
+                            <?php
+                                foreach($images as $image):
+                            ?>
+                                    <img data-imgbigurl="img/product/details/product-details-2.jpg"
+                                src="<?=$image?>" alt="">
+                            <?php
+                                endforeach;
+                            ?> 
+                           
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
-                        <h3>Vetgetable’s Package</h3>
+                        <h3><?=$data['product_name']?></h3>
                         <div class="product__details__rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -273,7 +286,7 @@
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 reviews)</span>
                         </div>
-                        <div class="product__details__price">$50.00</div>
+                        <div class="product__details__price"><?=$data['price']?></div>
                         <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
                             vehicula elementum sed sit amet dui. Sed porttitor lectus nibh. Vestibulum ac diam sit amet
                             quam vehicula elementum sed sit amet dui. Proin eget tortor risus.</p>
@@ -284,7 +297,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#" class="primary-btn">ADD TO CARD</a>
+                        <a href="#" data-toggle="modal" data-target="#exampleModal" class="primary-btn">ADD TO CARD</a>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b> <span>In Stock</span></li>
@@ -527,6 +540,57 @@
                 </div>
             </div>
         </div>
+
+        <!-- modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Shipping Address</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div id="error"></div>
+        <div class="" id="step1">
+        <form action="" style="display:block" id="form1">
+                <div class="row d-flex justify-content-center">
+                    <div class="form-group col-12">
+                        <label for="Address">Street</label>
+                        <input type="text" name="street" class="form-control">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="Address">City</label>
+                        <input type="text" name="city" class="form-control">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="Address">State</label>
+                        <input type="text" name="state" class="form-control">
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-primary" id="next">next</button>
+        </div>
+        <div class="" style="display:none" id="step2">
+        <form action="" id="form2">
+                <div class="row d-flex justify-content-center">
+                    <div class="form-group col-12">
+                        <label for="Address">Email</label>
+                        <input type="text" name="email" class="form-control">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="Address">Name</label>
+                        <input type="text" name="name" class="form-control">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="Address">Contact</label>
+                        <input type="text" name="contact" class="form-control">
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-primary" id="check">Checkout</button>
+        </div>
     </footer>
     <!-- Footer Section End -->
 
@@ -540,7 +604,16 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
 
-
+    <script>
+        $('#next').click(function(){
+            $('#step1').hide();
+            $('#step2').show();
+        })
+        $("#check").click(function(){
+            console.log($("#form1").serializeArray());
+            console.log($("#form2").serializeArray());
+        })
+    </script>
 </body>
 
 </html>

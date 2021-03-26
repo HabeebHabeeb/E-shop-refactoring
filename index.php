@@ -111,16 +111,16 @@
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li class="active"><a href="index.php">Home</a></li>
-                <li><a href="./shop-grid.html">Shop</a></li>
+                <li><a href="./ogani/shop-grid.php">Shop</a></li>
                 <li><a href="#">Pages</a>
                     <ul class="header__menu__dropdown">
                         <li><a href="./shop-details.html">Shop Details</a></li>
                         <li><a href="ogani/shoping-cart.php">Shoping Cart</a></li>
                         <li><a href="./checkout.html">Check Out</a></li>
-                        <li><a href="./blog-details.html">Blog Details</a></li>
+                        <li><a href="./ogani/blog-details.php">Blog Details</a></li>
                     </ul>
                 </li>
-                <li><a href="./blog.html">Blog</a></li>
+                <li><a href="./ogani/blog.php">Blog</a></li>
                 <li><a href="./contact.html">Contact</a></li>
             </ul>
         </nav>
@@ -213,16 +213,16 @@
                     <nav class="header__menu">
                         <ul>
                             <li class="active"><a href="index.php">Home</a></li>
-                            <li><a href="./shop-grid.html">Shop</a></li>
+                            <li><a href="./ogani/shop-grid.php">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="./shop-details.html">Shop Details</a></li>
                                     <li><a href="ogani/shoping-cart.php">Shoping Cart</a></li>
                                     <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a href="./ogani/blog-details.php">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
+                            <li><a href="./ogani/blog.php">Blog</a></li>
                             <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
@@ -378,13 +378,10 @@
                                     </div>
                                     <div class="row  fetured__item__pic__hover my-3">
                                         <div class="col-6 text-center">
-                                            <a href="#" class='btn btn-outline-success'><i class="fa fa-heart"></i>&nbsp;Buy Now</a>
+                                            <a href="ogani/buy.php?buy=<?=$data[$increment]['id']?>" class='btn btn-outline-success'><i class="fa fa-heart"></i>&nbsp;Buy Now</a>
                                         </div>
                                         <div class="col-6 text-center">
-                                            <form action="<?=$_SERVER['PHP_SELF']?>" method="post">
-                                            <input type="hidden" name="cart_id" value='<?=((isset($_SESSION['user_id']))?$data[$increment]['id']:'login_first')?>'>
-                                                <input type="submit" name='cart' class='btn btn-secondary' value='Add to Cart'>
-                                            </form>
+                                            <button class="btn btn-success" id="cart-<?=$data[$increment]['id']?>" onclick="cart(this.id)">Cart</button>
                                         </div>
                                     </div>
                                 </div>
@@ -781,6 +778,18 @@
             }
             xhr.open('POST','ogani/shoping-cart.php',true);
             xhr.send(productId);
+        }
+        let cart = (id) => {
+            let cartId = id.split("-").pop();
+            $.ajax({
+                url: "requests.php",
+                method: "POST",
+                data: {cartId},
+                success: (res) => {
+                    console.log(cartId);
+                    console.log(res);
+                }
+            })
         }
     </script>
 

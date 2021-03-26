@@ -179,7 +179,7 @@
                                 Menu
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>Dashboard <span class="badge badge-success">6</span></a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>Dashboard <span class="badge badge-success">6</span></a>
                                 <div id="submenu-1" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
@@ -225,6 +225,13 @@
                                         </li>
                                     </ul>
                                 </div>
+                            </li>
+                            <!-- test -->
+                            <li class="nav-item ">
+                                <a class="nav-link " href="pages/data-tables.php"><i class="fa fa-fw fa-user-circle"></i>Products <span class="badge badge-success">6</span></a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link active" href="Post.php"><i class="fa fa-fw fa-user-circle"></i>Add Product <span class="badge badge-success">6</span></a>
                             </li>
                         </ul>
                     </div>
@@ -273,22 +280,25 @@
                         $edit_id = $_GET['edit'];
                         //$edit_data = new Controller;
                         $data = $ctrl->select_this($edit_id);
-                        $img = explode(',',$data['photo']);           
+                        $img = explode(',',$data['photo']);          
                     }
+                    //include_once "../../requests.php";
                 ?>
-                <form action="../../requests.php" method="post" id='form' enctype="multipart/form-data">
+                <div class="alert alert-danger hidden" id="message" style="display:none">
+                </div>
+                <form id='form' enctype="multipart/form-data">
                     <div class="row my-4 mx-3">
                         <div class="form-group col-12 col-md-4 col-sm-12">
                             <label for="name">Title</label>
-                            <input type="text" name="product_name" id="product_name" class="form-control" value="<?=((isset($_GET['edit']))?$data['product_name']:(isset($productName))?$productName:'')?>">
+                            <input type="text" name="product_name" required id="product_name" class="form-control" value="<?=((isset($_GET['edit']))?$data['product_name']:'')?>">
                         </div>
                         <div class="form-group col-12 col-md-4 col-sm-12">
                             <label for="price">Price:</label>
-                            <input type="number" name="price" id="price" class="form-control" min=0 value="<?=((isset($_GET['edit']))?$data['price']:(isset($price))?$price:'')?>">
+                            <input type="number" required name="price" id="price" class="form-control" min=0 value="<?=((isset($_GET['edit']))?$data['price']:'')?>">
                         </div>
                         <div class="form-group col-12 col-md-4 col-sm-12">
                             <label for="listPrice">List Price:</label>
-                            <input type="text" name="list_price" id="list_price" class="form-control" value="<?=((isset($_GET['edit']))?$data['list_price']:(isset($listPrice))?$listPrice:'')?>">
+                            <input type="text" required name="list_price" id="list_price" class="form-control" value="<?=((isset($_GET['edit']))?$data['list_price']:'')?>">
                         </div>
                     </div>
                     <div class="row mx-3 my-4">
@@ -306,10 +316,10 @@
                                                     <div class="row">
                                                         <div class="upload-btn-wrapper text-center col-6 my-2" >
                                                             <button class="bttn mx-4"><i class="fas fa-pencil-alt"></i></button>
-                                                            <input type="file" class='edit' id='edit-<?=$count?>' onclick ='get(this.id);'/>
+                                                            <input type="file" class='edit' id='edit-<?=$count?>' onclick ='get(this.id,<?=$edit_id?>);'/>
                                                         </div>
                                                         <div class="upload-btn-wrapper text-center col-6 my-2" >
-                                                            <button class="btn" id='delete-<?=$count?>' onclick='del(this.id);return false;'><i class="fas fa-trash-alt"></i></button>
+                                                            <button class="btn" id='delete-<?=$count?>' onclick='del(this.id,<?=$edit_id?>);return false;'><i class="fas fa-trash-alt"></i></button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -322,20 +332,20 @@
                                 else:    
                             ?>
                                     <label for="photo">Product Image</label>
-                                    <input type="file" name="photo[]" id="product-image" class="form-control" multiple>
+                                    <input type="file" required name="photo[]" id="product-image" class="form-control" multiple>
                             <?php
                                 endif;
                             ?>
                         </div>
                         <div class="form-group col-sm-12 col-lg-5 col-md-12">
                             <div class="input-group flex-nowrap my-4">
-                                <input type="text" class="form-control" id="info" placeholder="Available Product" aria-label="Username" aria-describedby="addon-wrapping">
+                                <input required type="text" class="form-control" id="info" placeholder="Available Product" aria-label="Username" aria-describedby="addon-wrapping">
                                 <div class="input-group-prepend">
                                     <button class="input-group-text btn" id="addon-wrapping">Add Sizes</button>
                                 </div>
                                 <!--div class="form-g col-md-5"-->
-                                    <input type="hidden" name='img' value="<?=$data['photo']?>" class='form-control mx-4'>
-                                    <input type="text" id='val' name='sizes' value="<?=((isset($_GET['edit']))?$data['sizes']:(isset($sizes))?$sizes:'')?>" class='form-control mx-4'>
+                                    <!--input type="hidden" name='img' value="" class='form-control mx-4'-->
+                                    <input type="text" id='val' required name='sizes' value="<?=((isset($_GET['edit']))?$data['sizes']:'')?>" class='form-control mx-4'>
                                 <!--/div-->
                             </div>
                         </div>
@@ -344,25 +354,35 @@
                     <div class="row mx-3 my-4">
                         <div class="form-group col-md-4 col-sm-12">
                             <label for="Category">Category:</label>
-                            <input type="text" name="category" id="category" class="form-control" value="<?=((isset($_GET['edit']))?$data['category']:(isset($cart))?$cart:'')?>">
+                            <input type="text" required name="category" id="category" class="form-control" value="<?=((isset($_GET['edit']))?$data['category']:'')?>">
                         </div>
                         <div class="form-group col-md-4 col-sm-12">
                             <label for="brand">Brand:</label>
-                            <input type="text" name="brand" id="brand" class="form-control" min=0 value="<?=((isset($_GET['edit']))?$data['brand']:(isset($brand))?$brand:'')?>">
+                            <input type="text" required name="brand" id="brand" class="form-control" min=0 value="<?=((isset($_GET['edit']))?$data['brand']:'')?>">
                         </div>
                         <div class="form-group col-md-4 col-sm-12">
                             <label for="portfolio">Portfolio:</label>
-                            <input type="text" name="portfolio" id="portfolio" class="form-control" value="<?=((isset($_GET['edit']))?$data['portfolio']:(isset($port))?$port:'')?>">
+                            <input type="text" required name="portfolio" id="portfolio" class="form-control" value="<?=((isset($_GET['edit']))?$data['portfolio']:'')?>">
                         </div>
                     </div>
                     <div class="row mx-3 my-4">
                         <div class="form-group col-md-8 col-sm-8">
                             <label for="description">Description*:</label>
-                            <textarea id="description" name="details" class="form-control tinymce" rows="6"><?=((isset($_GET['edit']))?$data['description']:(isset($details))?$details:'')?></textarea>
+                            <textarea id="description" required name="details" class="form-control tinymce" rows="6"><?=((isset($_GET['edit']))?$data['description']:'')?></textarea>
                         </div>
                         <div class="form-group pull-right col-sm-4 col-md-4"><br>
-                            <a href="post.php" class="btn btn-outline-dark">Cancel</a>&nbsp;&nbsp;
-                            <button id='submit' class=" btn btn-outline-success pull-right"><?=((isset($_GET['edit']))?'Edit':'Add')?></button>
+                            <a href="pages/data-tables.php" class="btn btn-outline-dark">Cancel</a>&nbsp;&nbsp;
+                            <?php
+                                if(isset($_GET['edit'])):
+                            ?>
+                                    <button type="submit" id="edit" class=" btn btn-outline-success pull-right">Edit</button>
+                            <?php
+                                else:
+                            ?>
+                                    <button type="submit" id="submit" class=" btn btn-outline-success pull-right">Add</button>
+                            <?php
+                                endif;
+                            ?>
                         </div><div class="çlearfix"></div>
                     </div>
                 </form>
@@ -468,18 +488,17 @@
     })
 
     
-    /*let get = (id)=>
+    let get = (id,editId)=>
     {
         $('#'+id).change(()=>
         {
             let file = document.querySelector('#'+id).files[0];
             let formdata = new FormData();
-            let editId = <?=$edit_id;?>
             formdata.append('file',file);
             formdata.append('pro_id',editId)
             formdata.append('file-index',id.split('-').pop());
             $.ajax({
-                url : '../../../src/requests.inc.php',
+                url : '../../requests.php',
                 method : 'POST',
                 data : formdata,
                 cache : false,
@@ -492,36 +511,77 @@
                 }
             })
         });
-    }*/
+    }
 
-   /* let del = (id)=>
+    let del = (id, editId) =>
     {
         let index = id.split('-').pop();
+        let formData = new FormData();
+        formData.append('del-index',index);
+        formData.append('edit_id', editId);
         $.ajax({
-            url : '../../../src/requests.inc.php',
+            url : '../../requests.php',
             method : 'POST',
-            data : {'del-index' : index,'edit_id': <?=$edit_id?>},
+            data : formData,
+            cache: false,
+            processData: false,
+            contentType: false,
             success : (res)=>
             {
-                $('#div'+index).hide();
+                window.location.href = "Post.php?edit="+editId;
             }
         })
-    }*/
+    }
     $("#submit").click(function(e){
-        e.preventDefault();
-        let files = document.querySelector('#product-image').files[0];
-        let formdata = new FormData();
-        formdata.append('file',files);
-
-        /*$.ajax({
+       e.preventDefault();
+        let files = document.querySelector('#product-image').files
+        //console.log(files);
+        let formData = new FormData();
+        let data = $("#form").serializeArray();
+        for(let key of data){
+            formData.append(key.name,key.value);
+        }
+        for(let key in files){
+            formData.append('photo[]',files[key]);
+        }
+        $.ajax({
             url: "../../requests.php",
             method: "POST",
-            data: data,
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
             success: (res) => {
-                console.log(res);
+                    $('input').val("");
+                    $('text-area').val("");
+                    $("#message").html("Product added successfully");
+                    $("#message").show();
+                    //console.log(res);
+                
             }
-        })*/
-        console.log(files);
+        })
+    })
+    $("#edit").click(function(e){
+       e.preventDefault();
+        //console.log(files);
+        let formData = new FormData();
+        let data = $("#form").serializeArray();
+        for(let key of data){
+            formData.append(key.name,key.value);
+        }
+        formData.append('edit',true);
+        $.ajax({
+            url: "../../requests.php",
+            method: "POST",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: (res) => {
+                window.location.href = "pages/data-tables.php";
+                
+            }
+        })
     })
 </script>
 </body>

@@ -1,10 +1,11 @@
 <?php
-    if($_POST){
-        print_r($_POST);
-    }
-         if(isset($_POST['submit']))
-         {
-             $productName = $_POST['product_name'];
+    include_once "vendor/autoload.php";
+    use App\Controller\Controller;
+
+    if($_POST && !empty($_FILES['photo'])){
+       //print_r($_POST);
+      // print_r($_FILES['photo']);
+        $productName = $_POST['product_name'];
              $price = $_POST['price'];
              $listPrice = $_POST['list_price'];
              $cat = $_POST['category'];
@@ -12,47 +13,32 @@
              $brand = $_POST['brand'];
              $details = $_POST['details'];
              $sizes = $_POST['sizes'];
-     
-     
+
              $fields = [
-                 'product_name'=>$productName,
-                 'price'=>$price,
-                 'list_price'=>$listPrice,
-                 'category'=>$cat,
-                 'portfolio'=>$port,
-                 'brand'=>$brand,
-                 'description'=>$details,
-                 'sizes'=>$sizes
-             ];
-             foreach ($fields as $key => $value) 
-             {
-                 if(isset($_POST[$key]) && empty($_POST[$key]))
-                 {
-                     $ctrl->error[] = "All feilds are required";
-                 break;
-                 }
-             }
-             if(empty($_FILES['photo']['name'][0])){
-                 $ctrl->error[] = "upload image";
-             }else{
-                 $ctrl->setFile($_FILES);
-                 $ctrl->upload_image();
-             }
-             if(!empty($ctrl->error))
-             {
-                 echo $ctrl->display_errors();
-             }else{
-                 $ctrl->setData($fields);
-                 $ctrl->add();
-             }
-         }
+                'product_name'=>$productName,
+                'price'=>$price,
+                'list_price'=>$listPrice,
+                'category'=>$cat,
+                'portfolio'=>$port,
+                'brand'=>$brand,
+                'description'=>$details,
+                'sizes'=>$sizes
+            ];
+             $ctrl = new Controller;
+            $ctrl->setFile($_FILES);
+            $ctrl->upload_image();
+        if(!empty($ctrl->error))
+        {
+            echo $ctrl->display_errors();
+        }else{
+            $ctrl->setData($fields);
+            $ctrl->add();
+        }
+    }
 
         if(isset($_POST['edit']))
         { 
-            if(isset($_FILES['photo']) && !empty($_FILES['photo']['name'])){
-                $ctrl->setFile($_FILES);
-                $ctrl->upload_image();
-            }
+            $ctrl = new Controller;
             $productName = $_POST['product_name'];
             $price = $_POST['price'];
             $listPrice = $_POST['list_price'];
@@ -61,7 +47,7 @@
             $brand = $_POST['brand'];
             $details = $_POST['details'];
             $sizes = $_POST['sizes'];
-            $photo = explode(',',$_POST['img']);
+            $photo = explode(',',$_POST['photo']);
             $fields = [
                 'product_name'=>$productName,
                 'price'=>$price,
@@ -72,14 +58,6 @@
                 'description'=>$details,
                 'sizes'=>$sizes
             ];
-            foreach ($fields as $key => $value) 
-            {
-                if(isset($_POST[$key]) && empty($_POST[$key]))
-                {
-                    $ctrl->error[] = "All feilds are required";
-                    break;
-                }
-            }
             if(!empty($ctrl->error))
             {
                 echo $ctrl->display_errors();
@@ -92,14 +70,14 @@
                 }
             }
         }
-
+        if(isset($_POST['cartId'])){
+            $ctrl = new Controller;
+            $ctrl->addToCart($_POST['cartId']);
+        }
         if(isset($_POST['pro_id']) && !empty($_POST['pro_id'])){
             if(isset($_FILES['file']['name']) && !empty($_FILES['file']['name']))
             {
-                $dbh = new Model\Database;
-                $db = $dbh->connect();
-
-                $ctrl = new Controller($db);
+                $ctrl = new Controller();
                 $edit_index = $_POST['file-index'];
                 $pro_id = $_POST['pro_id'];
                 $ctrl->setFile($_FILES['file']);
@@ -107,11 +85,9 @@
             }
         }
         if(isset($_POST['del-index'])){
-            $dbh = new Database;
-            $db = $dbh->connect();
-            $ctrl = new Controller($db);
+            $ctrl = new Controller();
             $edit_id = $_POST['edit_id'];
-            $ctrl->delete_image($edit_id,$_POST['del-index']);
+            $ctrl->delete_image($_POST['edit_id'],$_POST['del-index']);
         }
     if(isset($_GET['delete']))
     {
