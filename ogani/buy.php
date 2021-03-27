@@ -603,16 +603,35 @@
     <script src="js/mixitup.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
-
+    <script src="https://js.paystack.co/v1/inline.js"></script> 
     <script>
         $('#next').click(function(){
             $('#step1').hide();
             $('#step2').show();
         })
-        $("#check").click(function(){
+        $("#check").click(function(e){
             console.log($("#form1").serializeArray());
             console.log($("#form2").serializeArray());
+            payWithPaystack(e)
         })
+        function payWithPaystack(e) {
+            e.preventDefault();
+            let handler = PaystackPop.setup({
+                key: 'pk_test_de8d5775f034b47c4d596c5008ff4606f5adf240', // Replace with your public key
+                email: "ajani_habeeb@yahoo.com",//document.getElementById("email-address").value,
+                amount: 9000000 * 100,//document.getElementById("amount").value * 100,
+                ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                // label: "Optional string that replaces customer email"
+                onClose: function(){
+                alert('Window closed.');
+                },
+                callback: function(response){
+                let message = 'Payment complete! Reference: ' + response.reference;
+                alert(message);
+                }
+            });
+            handler.openIframe();
+        }
     </script>
 </body>
 
