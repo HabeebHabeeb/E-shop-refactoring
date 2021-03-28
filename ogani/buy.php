@@ -558,38 +558,39 @@
                 <div class="row d-flex justify-content-center">
                     <div class="form-group col-12">
                         <label for="Address">Street</label>
-                        <input type="text" name="street" class="form-control">
+                        <input type="text" id="street" name="street" required class="form-control">
                     </div>
                     <div class="form-group col-12">
                         <label for="Address">City</label>
-                        <input type="text" name="city" class="form-control">
+                        <input type="text" id="city" name="city" required class="form-control">
                     </div>
                     <div class="form-group col-12">
                         <label for="Address">State</label>
-                        <input type="text" name="state" class="form-control">
+                        <input type="text" id="state" required name="state" class="form-control">
                     </div>
                 </div>
             </form>
-            <button class="btn btn-primary" id="next">next</button>
+            <button type="submit" disabled class="btn btn-primary" id="next">next</button>
         </div>
         <div class="" style="display:none" id="step2">
         <form action="" id="form2">
                 <div class="row d-flex justify-content-center">
                     <div class="form-group col-12">
                         <label for="Address">Email</label>
-                        <input type="text" name="email" class="form-control">
+                        <input type="text" id="email" name="email" required class="form-control">
                     </div>
                     <div class="form-group col-12">
                         <label for="Address">Name</label>
-                        <input type="text" name="name" class="form-control">
+                        <input type="text" id="name" name="name" required class="form-control">
                     </div>
                     <div class="form-group col-12">
                         <label for="Address">Contact</label>
-                        <input type="text" name="contact" class="form-control">
+                        <input type="text" id="contact" name="contact" required class="form-control">
                     </div>
                 </div>
             </form>
-            <button class="btn btn-primary" id="check">Checkout</button>
+            <button class="btn btn-primary" disabled id="check">Checkout</button>
+            <button type="submit" class="btn btn-primary ml-2" id="back">Back</button>
         </div>
     </footer>
     <!-- Footer Section End -->
@@ -605,10 +606,27 @@
     <script src="js/main.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script> 
     <script>
+        //if($("#step1").)
         $('#next').click(function(){
             $('#step1').hide();
             $('#step2').show();
         })
+        $('#back').click(function(){
+            $('#step2').hide();
+            $('#step1').show();
+        })
+        $("#form1").submit(() => {
+            return false;
+        })
+        $("#form2").submit(() => {
+            return false;
+        })
+        if(($("#state").val() !== "") && ($("#city").val() !== "") && ($("#street").val() !== "")){
+            $("#next").attr("disabled",false);
+        }
+        /*if($("#state").val() != "" && $("#city").val() != "" && $("#street").val() != ""){
+            $("#next").attr("disable",false);
+        }*/
         $("#check").click(function(e){
             console.log($("#form1").serializeArray());
             console.log($("#form2").serializeArray());
