@@ -607,7 +607,6 @@
     <script src="js/main.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script> 
     <script>
-        //if($("#step1").)
         $('#next').click(function(){
             if($("#state").val() != "" && $("#city").val() != "" && $("#street").val() != ""){
                 $('#step1').hide();
@@ -627,9 +626,7 @@
         $("#check").click(function(e){
             if($("#email").val() != "" && $("#name").val() != "" && $("#contact").val() != ""){
                 $("#exampleModal").hide();
-                //payWithPaystack(e)
-               console.log(((parseInt(document.getElementById("amount").text) * document.getElementById("quantity").value) * 100));
-                
+                payWithPaystack(e)
             }
         })
         function payWithPaystack(e) {
@@ -637,7 +634,7 @@
             let handler = PaystackPop.setup({
                 key: 'pk_test_de8d5775f034b47c4d596c5008ff4606f5adf240', // Replace with your public key
                 email: document.getElementById("email").value,
-                amount: ((document.getElementById("amount").value * document.getElementById("amount").value) * 100),
+                amount: (parseInt($("#amount").text()) * $("#quantity").val()) * 100,
                 ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
                 // label: "Optional string that replaces customer email"
                 onClose: function(){
@@ -645,7 +642,7 @@
                 },
                 callback: function(response){
                 let message = 'Payment complete! Reference: ' + response.reference;
-                alert(message);
+                
                 }
             });
             handler.openIframe();
