@@ -642,6 +642,15 @@
                 },
                 callback: function(response){
                 let message = 'Payment complete! Reference: ' + response.reference;
+                let formData = new FormData()
+                let data1 = $("#form1").serializeArray();
+                let data2 = $("#form2").serializeArray();
+                for(let data of data1){
+                    formData.append(data.name,data.value);
+                }
+                for(let data of data2){
+                    formData.append(data.name,data.value);
+                }
                 
                 }
             });
