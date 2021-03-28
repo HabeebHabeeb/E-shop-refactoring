@@ -286,14 +286,14 @@
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 reviews)</span>
                         </div>
-                        <div class="product__details__price"><?=$data['price']?></div>
+                        <div id="amount" class="product__details__price"><?=$data['price']?></div>
                         <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
                             vehicula elementum sed sit amet dui. Sed porttitor lectus nibh. Vestibulum ac diam sit amet
                             quam vehicula elementum sed sit amet dui. Proin eget tortor risus.</p>
                         <div class="product__details__quantity">
                             <div class="quantity">
                                 <div class="pro-qty">
-                                    <input type="text" value="1">
+                                    <input type="text" value="1" id="quantity">
                                 </div>
                             </div>
                         </div>
@@ -569,8 +569,9 @@
                         <input type="text" id="state" required name="state" class="form-control">
                     </div>
                 </div>
+                <button type="submit" class="btn btn-primary" id="next">next</button>
+
             </form>
-            <button type="submit" disabled class="btn btn-primary" id="next">next</button>
         </div>
         <div class="" style="display:none" id="step2">
         <form action="" id="form2">
@@ -588,9 +589,9 @@
                         <input type="text" id="contact" name="contact" required class="form-control">
                     </div>
                 </div>
+                <button type="submit" class="btn btn-primary" id="check">Checkout</button>
+                <button class="btn btn-primary ml-2" id="back">Back</button>
             </form>
-            <button class="btn btn-primary" disabled id="check">Checkout</button>
-            <button type="submit" class="btn btn-primary ml-2" id="back">Back</button>
         </div>
     </footer>
     <!-- Footer Section End -->
@@ -608,8 +609,10 @@
     <script>
         //if($("#step1").)
         $('#next').click(function(){
-            $('#step1').hide();
-            $('#step2').show();
+            if($("#state").val() != "" && $("#city").val() != "" && $("#street").val() != ""){
+                $('#step1').hide();
+                $('#step2').show();
+            }
         })
         $('#back').click(function(){
             $('#step2').hide();
@@ -621,23 +624,20 @@
         $("#form2").submit(() => {
             return false;
         })
-        if(($("#state").val() !== "") && ($("#city").val() !== "") && ($("#street").val() !== "")){
-            $("#next").attr("disabled",false);
-        }
-        /*if($("#state").val() != "" && $("#city").val() != "" && $("#street").val() != ""){
-            $("#next").attr("disable",false);
-        }*/
         $("#check").click(function(e){
-            console.log($("#form1").serializeArray());
-            console.log($("#form2").serializeArray());
-            payWithPaystack(e)
+            if($("#email").val() != "" && $("#name").val() != "" && $("#contact").val() != ""){
+                $("#exampleModal").hide();
+                //payWithPaystack(e)
+               console.log(((parseInt(document.getElementById("amount").text) * document.getElementById("quantity").value) * 100));
+                
+            }
         })
         function payWithPaystack(e) {
             e.preventDefault();
             let handler = PaystackPop.setup({
                 key: 'pk_test_de8d5775f034b47c4d596c5008ff4606f5adf240', // Replace with your public key
-                email: "ajani_habeeb@yahoo.com",//document.getElementById("email-address").value,
-                amount: 9000000 * 100,//document.getElementById("amount").value * 100,
+                email: document.getElementById("email").value,
+                amount: ((document.getElementById("amount").value * document.getElementById("amount").value) * 100),
                 ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
                 // label: "Optional string that replaces customer email"
                 onClose: function(){
