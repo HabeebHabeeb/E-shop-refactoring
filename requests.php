@@ -154,4 +154,25 @@
         $ctrl = new Controller($db);
         $ctrl->checkout();
     }
+    if(isset($_POST['product'])){
+        $productName = $_POST['product'];
+             $quantity = $_POST['quantity'];
+             $reference = $_POST['payment_ref'];
+             $address = $_POST['street'].",".$_POST['city'].".".$_POST['state'];
+             $email = $_POST['email'];
+             $contact = $_POST['contact'];
+             $name = $_POST['name'];
+
+             $fields = [
+                'product'=>$productName,
+                'quantity'=>$quantity,
+                'shipping_address'=>$address,
+                'email'=>$email,
+                'contact'=>$contact,
+                'name'=>$name,
+                "payment_ref"=>$reference
+            ];
+             $ctrl = new Controller;
+             $ctrl->orderSingle($fields);
+    }
 ?>

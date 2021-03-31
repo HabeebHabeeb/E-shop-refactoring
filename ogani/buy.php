@@ -277,7 +277,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
-                        <h3><?=$data['product_name']?></h3>
+                        <h3 id="product"><?=$data['product_name']?></h3>
                         <div class="product__details__rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -554,7 +554,7 @@
       <div class="modal-body">
       <div id="error"></div>
         <div class="" id="step1">
-        <form action="" style="display:block" id="form1">
+        <form style="display:block" id="form1">
                 <div class="row d-flex justify-content-center">
                     <div class="form-group col-12">
                         <label for="Address">Street</label>
@@ -632,7 +632,7 @@
         function payWithPaystack(e) {
             e.preventDefault();
             let handler = PaystackPop.setup({
-                key: 'pk_test_de8d5775f034b47c4d596c5008ff4606f5adf240', // Replace with your public key
+                key: 'pk_test_a589929ab265e4255006501abc3ec8e42c16f000', // Replace with your public key
                 email: document.getElementById("email").value,
                 amount: (parseInt($("#amount").text()) * $("#quantity").val()) * 100,
                 ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
@@ -641,17 +641,36 @@
                 alert('Window closed.');
                 },
                 callback: function(response){
-                let message = 'Payment complete! Reference: ' + response.reference;
-                let formData = new FormData()
-                let data1 = $("#form1").serializeArray();
-                let data2 = $("#form2").serializeArray();
-                for(let data of data1){
-                    formData.append(data.name,data.value);
-                }
-                for(let data of data2){
-                    formData.append(data.name,data.value);
-                }
-                
+                    //let message = 'Payment complete! Reference: ' + response.reference;
+                    let formData = new FormData()
+                    let data1 = $("#form1").serializeArray();
+                    let data2 = $("#form2").serializeArray();
+                    //console.log(data1);
+                    for(let data of data1){
+                        formData.append(data.name,data.value);
+                    }
+                    for(let data of data2){
+                        formData.append(data.name,data.value);
+                    }
+                    formData.append("product",$("#product").text())
+                    formData.append("quantity",$("#quantity").val())
+                    formData.append("payment_ref",response.reference)
+                    
+                    $.ajax({
+                        url: "../requests.php",
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        cache: false,
+                        contentType: false,
+                        success: (res) => {
+                            //console.log(res);
+                            $(".modal").hide()
+                        },
+                        error: () => {
+                            console.log("something went wrong");
+                        }
+                    })
                 }
             });
             handler.openIframe();

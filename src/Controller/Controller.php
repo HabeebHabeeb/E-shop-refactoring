@@ -512,13 +512,25 @@
             $result = $this->DBHandler->query($sequel);
             return $result;
         }
-        public function checkout(){
-            $cart_table = "user_".Session::get('user_id')['id'];
-            $sequel = "UPDATE $cart_table SET active = 0";
-            $stmt = $this->DBHandler->query($sequel);
-            if($stmt){
-                echo "deleted table";
-            }
+        public function orderSingle($orderDetails){
+            $query_keys = implode(',',array_keys($orderDetails));
+                $query_values = implode(', :',array_keys($orderDetails));
+                $query = "INSERT INTO 
+                            singleorders($query_keys) 
+                        VALUES
+                            (:".$query_values.")";
+                $prep_stmt = $this->DBHandler->prepare($query);
+                foreach($orderDetails as $key => $value)
+                {
+                    $prep_stmt->bindValue(":".$key,$value);
+                }
+                $exec = $prep_stmt->execute();
+                if($exec)
+                {
+                   echo "success";
+                }else{
+                    echo "something went wrong";
+                }
         }
     }
 
