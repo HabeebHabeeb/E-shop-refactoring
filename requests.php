@@ -117,7 +117,7 @@
         $ctrl = new Controller($db);
         $ctrl::logOut();
     }
-    if(isset($_POST['cart'])){
+    /*if(isset($_POST['cart'])){
         //echo $_POST['cart_id']
         if($_POST['cart_id'] == 'login_first'){
             $url = $_SERVER['REQUEST_URI'];
@@ -130,6 +130,14 @@
             $db = $dbh->connect();
             $ctrl = new Controller($db);
             $ctrl->add_cart($_POST['cart_id']);
+        }
+    }*/
+    if(isset($_POST['cartId'])){
+        if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
+            $ctrl = new Controller;
+            $_SESSION['cart'] = $ctrl->select_this($_POST['cartId']);
+        }else{
+            echo "login";
         }
     }
     if(isset($_POST['Address'])){

@@ -269,43 +269,45 @@
                                    $total = 0;
                                    //if(isset($_SESSION['user_id'])):
                                     //if(!empty($cart_data)):
-                                    foreach(Session::get('cart') as $data):
-                                        $total = $total + $data['list_price'];
-                                        $image = explode(',',$data['photo']);
+                                    if(!empty(Session::get('cart'))):
+                                        foreach(Session::get('cart') as $data):
+                                            $total = $total + $data['list_price'];
+                                            $image = explode(',',$data['photo']);
                                 ?>
-                                    <tr>
-                                        <td class="shoping__cart__item">
-                                            <div class="fotorama" style='width:270px;height:150px;'>
-                                                <?php
-                                                    foreach($image as $img):
-                                                ?>
-                                                        <img src="<?=$img?>" alt="img">
-                                                <?php
-                                                    endforeach;
-                                                ?>
+                                        <tr>
+                                            <td class="shoping__cart__item">
+                                                <div class="fotorama" style='width:270px;height:150px;'>
+                                                    <?php
+                                                        foreach($image as $img):
+                                                    ?>
+                                                            <img src="<?=$img?>" alt="img">
+                                                    <?php
+                                                        endforeach;
+                                                    ?>
+                                                </div>
+                                                <h5 style='font-size:bold;font:italic;' class="product"><?=$data['product_name']?></h5>
+                                            </td>
+                                            <td class="shoping__cart__price">
+                                                <?=$data['list_price']?>
+                                            </td>
+                                            <td class="shoping__cart__quantity">
+                                            <div class="quantity">
+                                                <div class="pro-qty" id="qty-<?=$indexer?>" onclick="getId(this.id)">
+                                                    <input type="text" value="1" class="quantity">
+                                                </div>
                                             </div>
-                                            <h5 style='font-size:bold;font:italic;'><?=$data['product_name']?></h5>
                                         </td>
-                                        <td class="shoping__cart__price">
-                                            <?=$data['list_price']?>
-                                        </td>
-                                        <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="pro-qty" id="qty-<?=$indexer?>" onclick="getId(this.id)">
-                                                <input type="text" value="1">
-                                            </div>
-                                        </div>
-                                    </td>
-                                        <td class="shoping__cart__total" id="price-<?=$indexer?>">
-                                            <?=$data['list_price']?>
-                                        </td>
-                                        <td class="shoping__cart__item__close">
-                                            <span class="icon_close"></span>
-                                        </td>
-                                    </tr>
+                                            <td class="shoping__cart__total" id="price-<?=$indexer?>">
+                                                <?=$data['list_price']?>
+                                            </td>
+                                            <td class="shoping__cart__item__close">
+                                                <span class="icon_close"></span>
+                                            </td>
+                                        </tr>
                                 <?php
                                             $indexer++;
                                         endforeach;
+                                    endif;
                                 ?>
                             </tbody>
                         </table>
@@ -334,8 +336,8 @@
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span id='sub-total'><?=((isset($_SESSION['user_id'])&&!empty($cart_data))?"$".$total:0)?></span></li>
-                            <li>Total <span id='total'><?=((isset($_SESSION['user_id'])&&!empty($cart_data))?"$".$total:0)?></span></li>
+                            <li>Subtotal <span id='sub-total'></span></li>
+                            <li>Total <span id='total'></span></li>
                         </ul>
                         <a href="#" data-toggle="modal" data-target="#exampleModal" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>
@@ -412,8 +414,8 @@
         </div>
     </footer>
     <!-- Footer Section End -->
-    <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -424,87 +426,46 @@
       </div>
       <div class="modal-body">
       <div id="error"></div>
-        <div class="" style="display:none" id="step1">
-            <form action="">
-                <div class="row">
+        <div class="" id="step1">
+        <form style="display:block" id="form1">
+                <div class="row d-flex justify-content-center">
                     <div class="form-group col-12">
                         <label for="Address">Street</label>
-                        <input type="text"id='ad' class="form-control">
+                        <input type="text" id="street" name="street" required class="form-control">
                     </div>
                     <div class="form-group col-12">
                         <label for="Address">City</label>
-                        <input type="text"id='' class="form-control">
+                        <input type="text" id="city" name="city" required class="form-control">
                     </div>
                     <div class="form-group col-12">
                         <label for="Address">State</label>
-                        <input type="text"id='' class="form-control">
+                        <input type="text" id="state" required name="state" class="form-control">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="next">next</button>
+
+            </form>
+        </div>
+        <div class="" style="display:none" id="step2">
+        <form action="" id="form2">
+                <div class="row d-flex justify-content-center">
+                    <div class="form-group col-12">
+                        <label for="Address">Email</label>
+                        <input type="text" id="email" name="email" required class="form-control">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="Address">Name</label>
+                        <input type="text" id="name" name="name" required class="form-control">
                     </div>
                     <div class="form-group col-12">
                         <label for="Address">Contact</label>
-                        <input type="text"id='' class="form-control">
+                        <input type="text" id="contact" name="contact" required class="form-control">
                     </div>
                 </div>
+                <button type="submit" class="btn btn-primary" id="check">Checkout</button>
+                <button class="btn btn-primary ml-2" id="back">Back</button>
             </form>
         </div>
-        <div class="" style="display:block" id="step2">
-            <!--form action="">
-                <div class="form-group col-12">
-                    <label for="name">Card Holder's Name</label>
-                    <input type="text" id='name' class="form-control">
-                </div>
-                <div class="form-group col-12">
-                    <label for="Cnum">Card Number</label>
-                    <input type="text" id='Cnum' class="form-control">
-                </div>
-                <div class="form-group col-4">
-                    <label for="cvc">CVC</label>
-                    <input type="text" id='cvc' class="form-control">
-                </div>
-                <div class="form-group col-12">
-                    <label for="month">Expire Month</label><br>
-                    <select name="exp-month" class="col-4" id="month">
-                        <!--?php for($i = 1;$i <= 12;++$i):?>
-                            <option value="<!--?=$i?>"><!--?=$i?></option>
-                        <!--?php endfor;?>
-                    </select>
-                </div><br/><br/>
-                <div class="form-group col-12">
-                    <label for="year">Expire Year</label><br>
-                    <select name="exp-year" class='col-12' id="year">
-                        <!--?php $year = date('Y');?>
-                            <!--?php for($i = 1;$i <= 10;++$i):?>
-                                <option value="<!--?=$year?>"><!--?=$year?></option>
-                            <!--?php $year++;?>
-                        <!--?php endfor;?>
-                    </select>
-                </div>
-            </form-->
-            <form action="/charge" method="post" id="payment-form">
-                <div class="form-row">
-                    <label for="card-element">
-                    Credit or debit card
-                    </label>
-                    <div id="card-element">
-                    <!-- A Stripe Element will be inserted here. -->
-                    </div>
-
-                    <!-- Used to display Element errors. -->
-                    <div id="card-errors" role="alert"></div>
-                </div>
-
-                <button id='pay'>Submit Payment</button>
-            </form>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id='next' onclick='validatePayType();'>Next >></button>
-        <button type="button" class="btn btn-primary" id='back' style="display:none" onclick='back();'><< Back</button>
-        <button type="button" class="btn btn-primary" id='next' style="display:none">Check Out</button>
-      </div>
-    </div>
-  </div>
-</div>
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -518,6 +479,17 @@
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
+        $(document).ready(function(){
+            let res = 0; 
+            let total = $(".shoping__cart__total").map(function(){
+                return $(this).text();
+            }).get();
+            total.forEach((data)=>{
+                res = res + Number(data);
+            })
+            $('#total').html("$ "+res);
+            $('#sub-total').html("$ "+res);
+        })
         let totalPrice ;
         let ele;
         let getId = function(id){
@@ -562,32 +534,90 @@
             $('#total').text("$ "+res);
             $('#sub-total').text("$ "+res);
         });
-        let validatePayType = ()=>{
-            let data = {
-                'Address' : $("#ad").val(),
-                'PAY_TYPE' : $("#pay_type").val(),
-                'AMOUNT' : $('#total').text()
+        $('#next').click(function(){
+            if($("#state").val() != "" && $("#city").val() != "" && $("#street").val() != ""){
+                $('#step1').hide();
+                $('#step2').show();
             }
-            $.ajax({
-                url : '../../src/requests.inc.php',
-                method : 'POST',
-                data : data,
-                success : function(res){
-                    console.log(res);
-                    $('#error').html(res);
-                }
-            })
-        }
-        $('#pay').click(()=>{
-            $.ajax({
-                url : '../../src/requests.inc.php',
-                method : 'POST',
-                data : {pay : true},
-                success : (res)=>{
-                    console.log('res');
-                }
-            })
         })
+        $('#back').click(function(){
+            $('#step2').hide();
+            $('#step1').show();
+        })
+        $("#form1").submit(() => {
+            return false;
+        })
+        $("#form2").submit(() => {
+            return false;
+        })
+        $("#check").click(function(e){
+            if($("#email").val() != "" && $("#name").val() != "" && $("#contact").val() != ""){
+                $("#exampleModal").hide();
+                //payWithPaystack(e)
+                let product = $(".product").map(function(){
+                    return $(this).text();
+                }).get();
+                let qauntity = $(".quantity").map(function(){
+                    return $(this).val();
+                }).get().filter((data)=>{
+                   return data !== ""
+                });
+                foreach(let product in product){
+                    let order = {
+                        product,
+                        quantity
+                    }
+                    formData.append("cart_item[]",order);
+                }
+            }
+        })
+
+        function payWithPaystack(e) {
+            e.preventDefault();
+            let handler = PaystackPop.setup({
+                key: 'pk_test_a589929ab265e4255006501abc3ec8e42c16f000', // Replace with your public key
+                email: document.getElementById("email").value,
+                amount: parseInt($("#total").text()) * 100,
+                ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                // label: "Optional string that replaces customer email"
+                onClose: function(){
+                alert('Window closed.');
+                },
+                callback: function(response){
+                    //let message = 'Payment complete! Reference: ' + response.reference;
+                    let formData = new FormData()
+                    let data1 = $("#form1").serializeArray();
+                    let data2 = $("#form2").serializeArray();
+                    //console.log(data1);
+                    for(let data of data1){
+                        formData.append(data.name,data.value);
+                    }
+                    for(let data of data2){
+                        formData.append(data.name,data.value);
+                    }
+                    formData.append("product",$("#product").text())
+                    formData.append("quantity",$("#quantity").val())
+                    formData.append("payment_ref",response.reference)
+                    
+                    $.ajax({
+                        url: "../requests.php",
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        cache: false,
+                        contentType: false,
+                        success: (res) => {
+                            //console.log(res);
+                            $(".modal").hide()
+                        },
+                        error: () => {
+                            console.log("something went wrong");
+                        }
+                    })
+                }
+            });
+            handler.openIframe();
+        }
     </script>
 </body>
 

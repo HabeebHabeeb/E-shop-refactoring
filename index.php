@@ -764,8 +764,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
     <script>
-        let get = (id)=>{
-            let productId = id.split('-')[1];
+        /*let get = (id)=>{
+            let productId = id.split('-').pop();
             //let data = 
             //alert(productId);
             let xhr = new XMLHttpRequest();
@@ -778,7 +778,7 @@
             }
             xhr.open('POST','ogani/shoping-cart.php',true);
             xhr.send(productId);
-        }
+        }*/
         let cart = (id) => {
             let cartId = id.split("-").pop();
             $.ajax({
@@ -786,8 +786,11 @@
                 method: "POST",
                 data: {cartId},
                 success: (res) => {
-                    console.log(cartId);
-                    console.log(res);
+                   if(res === "login"){
+                       window.location.href = "/Admin/concept-master/Login/login.php";
+                   }else{
+                       console.log("something");
+                   }
                 }
             })
         }
