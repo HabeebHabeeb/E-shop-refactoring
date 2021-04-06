@@ -476,11 +476,12 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
-    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script> 
 
     <script>
+    let res = 0;
         $(document).ready(function(){
-            let res = 0; 
+            //let res = 0; 
             let total = $(".shoping__cart__total").map(function(){
                 return $(this).text();
             }).get();
@@ -489,6 +490,7 @@
             })
             $('#total').html("$ "+res);
             $('#sub-total').html("$ "+res);
+            console.log(parseInt($("#total").html()) * 100);
         })
         let totalPrice ;
         let ele;
@@ -553,31 +555,45 @@
         $("#check").click(function(e){
             if($("#email").val() != "" && $("#name").val() != "" && $("#contact").val() != ""){
                 $("#exampleModal").hide();
-                //payWithPaystack(e)
-                let product = $(".product").map(function(){
-                    return $(this).text();
-                }).get();
-                let qauntity = $(".quantity").map(function(){
-                    return $(this).val();
-                }).get().filter((data)=>{
-                   return data !== ""
-                });
-                foreach(let product in product){
-                    let order = {
-                        product,
-                        quantity
+               payWithPaystack(e)
+              /* let formData = new FormData()
+                    let data1 = $("#form1").serializeArray();
+                    let data2 = $("#form2").serializeArray();
+                    //console.log(data1);
+                    for(let data of data1){
+                        formData.append(data.name,data.value);
                     }
-                    formData.append("cart_item[]",order);
-                }
+                    for(let data of data2){
+                        formData.append(data.name,data.value);
+                    }
+                    //formData.append("ref",response.reference)
+                    let products = $(".product").map(function(){
+                            return $(this).text();
+                        }).get();
+                        let quantity = $(".quantity").map(function(){
+                            return $(this).val();
+                        }).get().filter((data)=>{
+                            if(data !== " "){
+                                return data;
+                            }
+                        });
+                        let zipped = buildMap(products, quantity)
+                        console.log(zipped);*/
             }
         })
-
+        const buildMap = (keys, values) => {
+   const map = new Map();
+   for(let i = 0; i < keys.length; i++){
+      map.set(keys[i], values[i]);
+   };
+   return map;
+};
         function payWithPaystack(e) {
             e.preventDefault();
             let handler = PaystackPop.setup({
                 key: 'pk_test_a589929ab265e4255006501abc3ec8e42c16f000', // Replace with your public key
                 email: document.getElementById("email").value,
-                amount: parseInt($("#total").text()) * 100,
+                amount: res * 100,
                 ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
                 // label: "Optional string that replaces customer email"
                 onClose: function(){
@@ -595,10 +611,21 @@
                     for(let data of data2){
                         formData.append(data.name,data.value);
                     }
-                    formData.append("product",$("#product").text())
-                    formData.append("quantity",$("#quantity").val())
-                    formData.append("payment_ref",response.reference)
-                    
+                    formData.append("ref",response.reference)
+                    let products = $(".product").map(function(){
+                            return $(this).text();
+                        }).get();
+                        let quantity = $(".quantity").map(function(){
+                            return $(this).val();
+                        }).get().filter((data)=>{
+                        return data !== "";
+                        });
+                        //let zipped = products.map((x, i) => [x, quantity[i]]);
+                        //let zipped = buildMap(products, quantity)
+                        //formData.append("cart_item",zipped);
+                        for(let key in products){
+                            formData.append("cart_item[]",[products[key],quantity[key]])
+                        }
                     $.ajax({
                         url: "../requests.php",
                         method: "POST",
@@ -607,8 +634,8 @@
                         cache: false,
                         contentType: false,
                         success: (res) => {
-                            //console.log(res);
-                            $(".modal").hide()
+                            console.log(res);
+                           // $(".modal").hide()
                         },
                         error: () => {
                             console.log("something went wrong");

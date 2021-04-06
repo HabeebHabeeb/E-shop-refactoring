@@ -183,4 +183,7 @@
              $ctrl = new Controller;
              $ctrl->orderSingle($fields);
     }
+    if(isset($_POST['ref'])){
+        print_r($_POST['cart_item']);
+    }
 ?>
