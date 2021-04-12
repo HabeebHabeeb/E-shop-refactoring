@@ -9,9 +9,9 @@
         private $productTable = 'products';
         private $categoryTable = 'categories';
         private $brandTable = 'brands';
-        public $data;
-        public $files;
-        public $fileNames = "";
+        private $data;
+        private $files;
+        private $fileNames = "";
         public $error = [];
         public $success = [];
 
