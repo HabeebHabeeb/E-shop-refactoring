@@ -786,11 +786,7 @@
                 method: "POST",
                 data: {cartId},
                 success: (res) => {
-                   if(res === "login"){
-                       window.location.href = "/Admin/concept-master/Login/login.php";
-                   }else{
-                       console.log("something");
-                   }
+                   console.log(res);
                 }
             })
         }

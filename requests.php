@@ -1,6 +1,7 @@
 <?php
     include_once "vendor/autoload.php";
     use App\Controller\Controller;
+    use App\Controller\Cart;
 
     if($_POST && !empty($_FILES['photo'])){
        //print_r($_POST);
@@ -133,12 +134,8 @@
         }
     }*/
     if(isset($_POST['cartId'])){
-        if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
-            $ctrl = new Controller;
-            $_SESSION['cart'] = $ctrl->select_this($_POST['cartId']);
-        }else{
-            echo "login";
-        }
+        $cart = new Cart($_POST['cartId']);
+        $cart->add();
     }
     if(isset($_POST['Address'])){
         $obj = new Controller;
