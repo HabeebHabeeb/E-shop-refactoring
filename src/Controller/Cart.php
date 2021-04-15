@@ -1,7 +1,7 @@
 <?php
     require_once "../../vendor/autoload.php";
     use App\Model\Database;
-    class Cart {
+    class Cart extends Database{
         private $itemId;
         private $itemArray = [];
         private $cartItem;
@@ -11,7 +11,11 @@
         }
 
         public function add(){
-            $sql = "SELECT product_name,sizes,"
+            $sql = "SELECT product_name,sizes,list_price,photo FROM products WHERE id=:id";
+            $preparedStatement = $this->DBHandler->prepare($sql);
+            $executeQuery = $preparedStatement->execute([$this->itemId]);
+            $result = $preparedStatement->fetch();
+            print_r($result);
         }
     }
 ?>
