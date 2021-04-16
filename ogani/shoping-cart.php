@@ -558,13 +558,7 @@
                 payWithPaystack(e)
             }
         })
-        const buildMap = (keys, values) => {
-   const map = new Map();
-   for(let i = 0; i < keys.length; i++){
-      map.set(keys[i], values[i]);
-   };
-   return map;
-};
+        
         function payWithPaystack(e) {
             e.preventDefault();
             let handler = PaystackPop.setup({
@@ -597,9 +591,7 @@
                         }).get().filter((data)=>{
                         return data !== "";
                         });
-                        //let zipped = products.map((x, i) => [x, quantity[i]]);
-                        //let zipped = buildMap(products, quantity)
-                        //formData.append("cart_item",zipped);
+                        
                         for(let key in products){
                             formData.append("cart_item[]",[products[key],quantity[key]])
                         }
