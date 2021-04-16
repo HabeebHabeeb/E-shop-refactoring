@@ -301,7 +301,7 @@
                                                 <?=$data['list_price']?>
                                             </td>
                                             <td class="shoping__cart__item__close">
-                                                <span class="icon_close"></span>
+                                                <span class="icon_close" id="<?="remove-".$data['id']?>" onclick="removeItem(this.id)"></span>
                                             </td>
                                         </tr>
                                 <?php
@@ -555,30 +555,7 @@
         $("#check").click(function(e){
             if($("#email").val() != "" && $("#name").val() != "" && $("#contact").val() != ""){
                 $("#exampleModal").hide();
-               payWithPaystack(e)
-              /* let formData = new FormData()
-                    let data1 = $("#form1").serializeArray();
-                    let data2 = $("#form2").serializeArray();
-                    //console.log(data1);
-                    for(let data of data1){
-                        formData.append(data.name,data.value);
-                    }
-                    for(let data of data2){
-                        formData.append(data.name,data.value);
-                    }
-                    //formData.append("ref",response.reference)
-                    let products = $(".product").map(function(){
-                            return $(this).text();
-                        }).get();
-                        let quantity = $(".quantity").map(function(){
-                            return $(this).val();
-                        }).get().filter((data)=>{
-                            if(data !== " "){
-                                return data;
-                            }
-                        });
-                        let zipped = buildMap(products, quantity)
-                        console.log(zipped);*/
+                payWithPaystack(e)
             }
         })
         const buildMap = (keys, values) => {
@@ -644,6 +621,20 @@
                 }
             });
             handler.openIframe();
+        }
+        const removeItem = (id) => {
+            let itemId = id.split("-").pop();
+            $.ajax({
+                url: "../requests.php",
+                method: "POST",
+                data: {itemId},
+                success: (res) => {
+                    $(`#${id}`).parent().parent().remove();
+                }
+            })
+        }
+        const updateCart = () => {
+
         }
     </script>
 </body>

@@ -71,10 +71,6 @@
                 }
             }
         }
-        if(isset($_POST['cartId'])){
-            $ctrl = new Controller;
-            $ctrl->addToCart($_POST['cartId']);
-        }
         if(isset($_POST['pro_id']) && !empty($_POST['pro_id'])){
             if(isset($_FILES['file']['name']) && !empty($_FILES['file']['name']))
             {
@@ -134,8 +130,10 @@
         }
     }*/
     if(isset($_POST['cartId'])){
-        $cart = new Cart($_POST['cartId']);
+        $cart = new Cart;
+        $cart->setItemId($_POST['cartId']);
         $cart->add();
+       // $cart->getCookies
     }
     if(isset($_POST['Address'])){
         $obj = new Controller;
@@ -182,5 +180,9 @@
     }
     if(isset($_POST['ref'])){
         print_r($_POST['cart_item']);
+    }
+    if(isset($_POST['itemId'])){
+        $cart = new Cart;
+        $cart->removeItem($_POST['itemId']);
     }
 ?>

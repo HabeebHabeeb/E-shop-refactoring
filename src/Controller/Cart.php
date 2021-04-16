@@ -4,17 +4,44 @@
     use App\Controller\Controller;
     class Cart extends Database{
         private $itemId;
-        private $itemArray = [];
-        private $cartItem;
+        private $itemArray;
+        private $cartItem = array();
 
-        public function __construct($itemId){
-            $this->itemId = $itemId;
+        public function setItemId($id){
+            $this->itemId = $id;
         }
 
         public function add(){
-            $ctrl = new Controller;
-            $item = $ctrl->select_this($this->itemId);
-            print_r($item);
+            if($this->isPresent($this->itemId)){
+                echo "item already in cart";
+            }else{
+                $ctrl = new Controller;
+                $this->itemArray = $ctrl->select_this($this->itemId);
+                $_SESSION['cart'][] = $this->itemArray;
+                print_r($_SESSION['cart']); 
+            }  
+        }
+        public function isPresent($id){
+            if(isset($_SESSION['cart']) ){
+                for ($i=0; $i < count($_SESSION['cart']); $i++) { 
+                     if(in_array($id,$_SESSION['cart'][$i])){
+                         return true;
+                     }
+                }
+             }
+        }
+        public function removeItem($id){
+            $index;
+            for ($i=0; $i < count($_SESSION['cart']); $i++) { 
+                if(in_array($id,$_SESSION['cart'][$i])){
+                    $index = $i;
+                }
+                
+           }
+            $remove = array_splice($_SESSION['cart'],$index,1);
+            if($remove){
+                echo "item removed";
+            }
         }
     }
 ?>
