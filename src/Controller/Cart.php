@@ -17,6 +17,7 @@
             }else{
                 $ctrl = new Controller;
                 $this->itemArray = $ctrl->select_this($this->itemId);
+                $this->itemArray['quantity'] = 1;
                 $_SESSION['cart'][] = $this->itemArray;
                 print_r($_SESSION['cart']); 
             }  
@@ -42,6 +43,16 @@
             if($remove){
                 echo "item removed";
             }
+        }
+
+        public function update($quantity){
+            $index = 0;
+            $cartArray = $_SESSION['cart'];
+            foreach($_SESSION['cart'] as $key => &$value){
+               $value['quantity'] = $quantity[$index];
+               $index++;
+            }
+            print_r($_SESSION['cart']);
         }
     }
 ?>

@@ -291,9 +291,9 @@
                                                 <?=$data['list_price']?>
                                             </td>
                                             <td class="shoping__cart__quantity">
-                                            <div class="quantity">
+                                            <div class="quantit">
                                                 <div class="pro-qty" id="qty-<?=$indexer?>" onclick="getId(this.id)">
-                                                    <input type="text" value="1" class="quantity">
+                                                    <input type="text" value="<?= $data['quantity']?>" class="quantity">
                                                 </div>
                                             </div>
                                         </td>
@@ -489,8 +489,7 @@
                 res = res + Number(data);
             })
             $('#total').html("$ "+res);
-            $('#sub-total').html("$ "+res);
-            console.log(parseInt($("#total").html()) * 100);
+            $('#sub-total').html("$ "+res); 
         })
         let totalPrice ;
         let ele;
@@ -535,6 +534,7 @@
             })
             $('#total').text("$ "+res);
             $('#sub-total').text("$ "+res);
+            updateCart();
         });
         $('#next').click(function(){
             if($("#state").val() != "" && $("#city").val() != "" && $("#street").val() != ""){
@@ -626,7 +626,20 @@
             })
         }
         const updateCart = () => {
-
+            let quantity = $(".quantity").map(function(){
+                            return $(this).val();
+                        }).get().filter((data)=>{
+                        return data !== "";
+                        });
+            
+            $.ajax({
+                url: "../requests.php",
+                method: "POST",
+                data: {"update": quantity},
+                success: (res) => {
+                    console.log(res);
+                }
+            })
         }
     </script>
 </body>
