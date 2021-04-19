@@ -52,7 +52,6 @@
                $value['quantity'] = $quantity[$index];
                $index++;
             }
-            print_r($_SESSION['cart']);
         }
     }
 ?>

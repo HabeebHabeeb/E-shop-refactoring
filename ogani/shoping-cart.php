@@ -291,14 +291,14 @@
                                                 <?=$data['list_price']?>
                                             </td>
                                             <td class="shoping__cart__quantity">
-                                            <div class="quantit">
+                                            <div>
                                                 <div class="pro-qty" id="qty-<?=$indexer?>" onclick="getId(this.id)">
                                                     <input type="text" value="<?= $data['quantity']?>" class="quantity">
                                                 </div>
                                             </div>
                                         </td>
                                             <td class="shoping__cart__total" id="price-<?=$indexer?>">
-                                                <?=$data['list_price']?>
+                                                <?=$data['list_price'] * $data['quantity']?>
                                             </td>
                                             <td class="shoping__cart__item__close">
                                                 <span class="icon_close" id="<?="remove-".$data['id']?>" onclick="removeItem(this.id)"></span>
@@ -628,18 +628,17 @@
         const updateCart = () => {
             let quantity = $(".quantity").map(function(){
                             return $(this).val();
-                        }).get().filter((data)=>{
-                        return data !== "";
-                        });
+                        }).get();
+            console.log(quantity);
             
-            $.ajax({
+            /*$.ajax({
                 url: "../requests.php",
                 method: "POST",
-                data: {"update": quantity},
+                data: {"updateCart": quantity},
                 success: (res) => {
                     console.log(res);
                 }
-            })
+            })*/
         }
     </script>
 </body>

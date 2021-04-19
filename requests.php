@@ -185,8 +185,8 @@
         $cart = new Cart;
         $cart->removeItem($_POST['itemId']);
     }
-    if(isset($_POST['update'])){
+    if(isset($_POST['updateCart'])){
        $cart = new Cart;
-       $cart->update($_POST['update']);
+       $cart->update($_POST['updateCart']);
     }
 ?>
