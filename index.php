@@ -764,21 +764,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
     <script>
-        /*let get = (id)=>{
-            let productId = id.split('-').pop();
-            //let data = 
-            //alert(productId);
-            let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = ()=>{
-                if(xhr.readyState == 4 && xhr.status == 200){
-                    console.log("sent successfully");
-                }else{
-                    console.log('something went wrong');
-                }
-            }
-            xhr.open('POST','ogani/shoping-cart.php',true);
-            xhr.send(productId);
-        }*/
+        
         let cart = (id) => {
             let cartId = id.split("-").pop();
             $.ajax({

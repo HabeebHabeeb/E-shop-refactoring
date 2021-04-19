@@ -604,7 +604,7 @@
                         contentType: false,
                         success: (res) => {
                             console.log(res);
-                           // $(".modal").hide()
+                           $("#exampleModal").modal('hide')
                         },
                         error: () => {
                             console.log("something went wrong");
