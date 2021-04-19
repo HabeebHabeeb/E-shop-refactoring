@@ -30,8 +30,8 @@
     <link rel="stylesheet" href="ogani/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="ogani/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="ogani/css/style.css" type="text/css">
-    <link href="toastr.css" rel="stylesheet">
-    <script src="toastr.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
@@ -751,6 +751,7 @@
     <script src="ogani/js/owl.carousel.min.js"></script>
     <script src="ogani/js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script>
         
         let cart = (id) => {
@@ -761,13 +762,12 @@
                 dataType: "json",
                 data: {cartId},
                 success: (res) => {
-                   // let newValue = parseInt($("#cart").html());
-                    //$(".itemsInCart").html(newValue + 1)
                     if(res.message == "item added to cart"){
                         let newValue = parseInt($("#cart").html());
                         $(".itemsInCart").html(newValue + 1)
                     }else{
-                        toastr.info(res.message);
+                        var notyf = new Notyf();
+                        notyf.success(res.message)
                     }
                 }
             })
