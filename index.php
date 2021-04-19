@@ -30,7 +30,8 @@
     <link rel="stylesheet" href="ogani/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="ogani/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="ogani/css/style.css" type="text/css">
-
+    <link href="toastr.css" rel="stylesheet">
+    <script src="toastr.js"></script>
     <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
@@ -64,7 +65,7 @@
         <div class="humberger__menu__cart">
             <ul>
                 <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span class="itemsInCart"><?=(isset($_SESSION['cart'])? count($_SESSION['cart']) : 0)?></span></a></li>
+                <li><a href="ogani/shoping-cart.php"><i class="fa fa-shopping-bag"></i> <span class="itemsInCart" id="cart"><?=(isset($_SESSION['cart'])? count($_SESSION['cart']) : 0)?></span></a></li>
             </ul>
             <div class="header__cart__price">item: <span>$150.00</span></div>
         </div>
@@ -112,13 +113,7 @@
             <ul>
                 <li class="active"><a href="index.php">Home</a></li>
                 <li><a href="./ogani/shop-grid.php">Shop</a></li>
-                <li><a href="#">Pages</a>
-                    <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.html">Shop Details</a></li>
-                        <li><a href="ogani/shoping-cart.php">Shoping Cart</a></li>
-                        <li><a href="./checkout.html">Check Out</a></li>
-                        <li><a href="./ogani/blog-details.php">Blog Details</a></li>
-                    </ul>
+                <li><a href="ogani/shoping-cart.php">Cart</a>
                 </li>
                 <li><a href="./ogani/blog.php">Blog</a></li>
                 <li><a href="./contact.html">Contact</a></li>
@@ -214,13 +209,7 @@
                         <ul>
                             <li class="active"><a href="index.php">Home</a></li>
                             <li><a href="./ogani/shop-grid.php">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="header__menu__dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="ogani/shoping-cart.php">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./ogani/blog-details.php">Blog Details</a></li>
-                                </ul>
+                            <li><a href="ogani/shoping-cart.php">Cart</a>
                             </li>
                             <li><a href="./ogani/blog.php">Blog</a></li>
                             <li><a href="./contact.html">Contact</a></li>
@@ -231,7 +220,7 @@
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span class="itemsInCart"><?=(isset($_SESSION['cart'])? count($_SESSION['cart']) : 0)?></span></a></li>
+                            <li><a href="ogani/shoping-cart.php"><i class="fa fa-shopping-bag"></i> <span class="itemsInCart"><?=(isset($_SESSION['cart'])? count($_SESSION['cart']) : 0)?></span></a></li>
                         </ul>
                         <div class="header__cart__price">item: <span>$150.00</span></div>
                     </div>
@@ -761,7 +750,6 @@
     <script src="ogani/js/mixitup.min.js"></script>
     <script src="ogani/js/owl.carousel.min.js"></script>
     <script src="ogani/js/main.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
     <script>
         
@@ -770,10 +758,17 @@
             $.ajax({
                 url: "requests.php",
                 method: "POST",
+                dataType: "json",
                 data: {cartId},
                 success: (res) => {
-                   let newValue = Number($(".itemsInCart").text()) + 1;
-                   $(".itemsInCart").text(newValue);
+                   // let newValue = parseInt($("#cart").html());
+                    //$(".itemsInCart").html(newValue + 1)
+                    if(res.message == "item added to cart"){
+                        let newValue = parseInt($("#cart").html());
+                        $(".itemsInCart").html(newValue + 1)
+                    }else{
+                        toastr.info(res.message);
+                    }
                 }
             })
         }

@@ -620,8 +620,17 @@
                 url: "../requests.php",
                 method: "POST",
                 data: {itemId},
-                success: (res) => {
+                success: (response) => {
                     $(`#${id}`).parent().parent().remove();
+                    let total = $(".shoping__cart__total").map(function(){
+                        return $(this).text();
+                    }).get();
+                    let newPrice = 0;
+                    total.forEach((data)=>{
+                        newPrice = newPrice + Number(data);
+                    })
+                    $('#total').html("$ "+newPrice);
+                    $('#sub-total').html("$ "+newPrice); 
                 }
             })
         }

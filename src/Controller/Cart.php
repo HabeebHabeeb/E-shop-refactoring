@@ -13,13 +13,19 @@
 
         public function add(){
             if($this->isPresent($this->itemId)){
-                echo "item already in cart";
+                $response = [
+                    'message' => "item already in cart"
+                ];
+                echo json_encode($response);
             }else{
                 $ctrl = new Controller;
                 $this->itemArray = $ctrl->select_this($this->itemId);
                 $this->itemArray['quantity'] = 1;
                 $_SESSION['cart'][] = $this->itemArray;
-                print_r($_SESSION['cart']); 
+                $response = [
+                    'message' => "item added to cart"
+                ];
+                echo json_encode($response); 
             }  
         }
         public function isPresent($id){
