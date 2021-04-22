@@ -59,7 +59,7 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="#"><img src="ogani/img/logo.png" alt=""></a>
+            <a href="#"><img src="img/logo.png" alt=""></a>
         </div>
         <h4>E-shop</h4>
         <div class="humberger__menu__cart">
@@ -201,7 +201,7 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo text-center">
-                        <a href="./index.html"><img src="logo.jpeg" alt="" style='height:10px;'></a>
+                        <a href="./index.html"><img src="img/logo.jpeg" alt="" style='height:10px;'></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -272,7 +272,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="hero__item set-bg" data-setbg="ogani/img/banner/banner-1.jpg">
+                    <div class="hero__item set-bg" data-setbg="/img/banner/banner-1.jpg">
                         <div class="hero__text">
                             <span>FRUIT FRESH</span>
                             <h2>Vegetable <br />100% Organic</h2>

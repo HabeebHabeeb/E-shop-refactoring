@@ -172,7 +172,7 @@
            $actExt = strtolower(end($ext));
            $file_name = sha1(microtime()).".".$actExt;
            $upload_name = '/E-shop/View/Admin/Uploads/'.$file_name;
-           $dir = $_SERVER['DOCUMENT_ROOT']."/E-shop/View/Admin/Uploads/".$file_name;
+           $dir = $_SERVER['DOCUMENT_ROOT']."/E-shop-refactoring/Admin/Uploads/".$file_name;
            if($size > 101010101)
            {
                $this->error[] = "File too large";
