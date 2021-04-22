@@ -7,10 +7,10 @@
 
     class Database
     {
-        private $host = 'b9521349c9c40f';
-        private $user = 'us-cdbr-east-03.cleardb.com';
+        private $host = "b9521349c9c40f";
+        private $user = "us-cdbr-east-03.cleardb.com";
         private $pwd = "9d1b4ccb";
-        private $db = 'heroku_f88d617ecf8cb4c';
+        private $db = "heroku_f88d617ecf8cb4c";
 
         protected $DBHandler;
 
