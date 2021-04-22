@@ -7,10 +7,10 @@
 
     class Database
     {
-        private $host = '127.0.0.1';
-        private $user = 'root';
-        private $pwd = "";
-        private $db = 'E-shop';
+        private $host = 'us-cdbr-east-03.cleardb.com';
+        private $user = 'b75c1571138218';
+        private $pwd = "811bc39b";
+        private $db = '';
 
         protected $DBHandler;
 

@@ -766,7 +766,7 @@
                         let newValue = parseInt($("#cart").html());
                         $(".itemsInCart").html(newValue + 1)
                     }else{
-                        var notyf = new Notyf();
+                        let notyf = new Notyf();
                         notyf.success(res.message)
                     }
                 }
