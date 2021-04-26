@@ -8,9 +8,9 @@
     class Database
     {
         private $host = "us-cdbr-east-03.cleardb.com";
-        private $user = "b9521349c9c40f";
-        private $pwd = "9d1b4ccb";
-        private $db = "heroku_f88d617ecf8cb4c";
+        private $user = "b5b858a188f13b";
+        private $pwd = "5f50c98e";
+        private $db = "heroku_9664a85a6c25d57";
 
         protected $DBHandler;
 
