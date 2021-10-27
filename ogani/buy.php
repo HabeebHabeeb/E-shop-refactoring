@@ -634,7 +634,7 @@
             let handler = PaystackPop.setup({
                 key: 'pk_live_92115b94650b1264be9494d89c2322599e35338d', // Replace with your public key
                 email: document.getElementById("email").value,
-                amount: 100,
+                amount: 100 * 100,
                 ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
                 // label: "Optional string that replaces customer email"
                 onClose: function(){
